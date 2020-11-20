@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS Vanilla</title>
+
+    <style>
+      form {
+        border: 1px solid #eee;
+        margin: 20px 0;
+        padding: 20px;
+        display: inline-block;
+      }
+
+      form > div {
+        margin-bottom: 10px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      section,
+      .popup {
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <h1>Lista de ciudades</h1>
+      <ul id="cities-list">
+        <li><button data-description="Ciudad capital de Venezuela">Caracas</button></li>
+        <li><button data-description="Ciudad capital de España">Madrid</button></li>
+        <li><button data-description="Ciudad capital de Italia">Roma</button></li>
+      </ul>
+    </section>
+    <div id="popup"></div>
+    <form id="form">
+      <div>
+        <label for="input-city-name">Nombre de la Ciudad</label>
+        <input id="input-city-name" type="text" name="input-city-name" placeholder="Escribe tu ciudad" />
+      </div>
+      <div>
+        <label for="input-city-description">Descripción de la Ciudad</label>
+        <textarea id="input-city-description" name="input-city-description" cols="30" rows="10"></textarea>
+      </div>
+      <button id="add-city" type="submit">Agregar Ciudad</button>
+    </form>
+
+    <script>
+      const popupNode = document.getElementById("popup");
+      function createPopup({ title, description, cityNode }) {
+        const popupTitleNode = document.createElement("h2");
+        popupTitleNode.innerText = title;
+        popupNode.appendChild(popupTitleNode);
+
+        const popupDescriptionNode = document.createElement("p");
+        popupDescriptionNode.innerText = description;
+        popupNode.appendChild(popupDescriptionNode);
+
+        const popupRemoveBtnNode = document.createElement("button");
+        popupRemoveBtnNode.innerText = "Borrar";
+        popupRemoveBtnNode.addEventListener("click", () => {
+          cityNode.parentNode.remove();
+          popupNode.textContent = "";
+        });
+        popupNode.appendChild(popupRemoveBtnNode);
+      }
+
+      const cityCallback = (e) => {
+        if (popupNode.hasChildNodes) popupNode.textContent = "";
+        createPopup({
+          title: e.target.innerText,
+          description: e.target.dataset.description,
+          cityNode: e.target,
+        });
+      };
+
+      const citiesListNode = document.getElementById("cities-list");
+      const citiesBtnsNode = citiesListNode.getElementsByTagName("button");
+      Array.from(citiesBtnsNode).map((btn) => {
+        btn.addEventListener("click", cityCallback);
+      });
+
+      const btnAddCityNode = document.getElementById("add-city");
+      const inputCityNameNode = document.getElementById("input-city-name");
+      const inputCityDescriptionNode = document.getElementById("input-city-description");
+
+      btnAddCityNode.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const cityNode = document.createElement("li");
+        const cityBtnNode = document.createElement("button");
+        const cityValue = document.createTextNode(inputCityNameNode.value);
+        cityBtnNode.appendChild(cityValue);
+        cityBtnNode.dataset.description = inputCityDescriptionNode.value;
+        cityBtnNode.addEventListener("click", cityCallback);
+        cityNode.appendChild(cityBtnNode);
+        citiesListNode.appendChild(cityNode);
+
+        const formNode = document.getElementById("form");
+        formNode.reset();
+      });
+    </script>
+  </body>
+</html>
