@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React w/o JSX</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script>
+      const rootNode = document.getElementById("app");
+
+      // React.createElement(type, [props], [...children])
+      const Description = React.createElement("p", { key: "description" }, "lorem ipsum....");
+
+      const SayHi = ({ children }) => React.createElement("h1", null, `Hola ${children}`);
+      const SayHelloToJohn = React.createElement(SayHi, null, "John");
+
+      const Greetings = React.createElement("section", { key: "greetings", className: "greetings-section" }, [
+        React.createElement(
+          "button",
+          { key: "say-hi-btn-1", onClick: () => console.log("Hello World!") },
+          "Say hi in english"
+        ),
+        React.createElement(
+          "button",
+          { key: "say-hi-btn-2", onClick: () => console.log("Hola mundo") },
+          "Say hi in spanish"
+        ),
+      ]);
+
+      const Container = React.createElement("div", { key: "testing-react-without-jsx" }, [Description, Greetings]);
+
+      ReactDOM.render(SayHelloToJohn, rootNode);
+    </script>
+  </body>
+</html>
