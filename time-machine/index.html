@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time Machine with React</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png" />
+    <link rel="manifest" href="./assets/favicon/site.webmanifest" />
+    <link rel="mask-icon" href="./assets/favicon/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#ffc40d" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="stylesheet" href="./assets/time-machine.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="https://unpkg.com/@babel/standalone@7.12.4/babel.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script type="text/babel">
+      const rootNode = document.getElementById("app");
+
+      class TimeMachine extends React.Component {
+        constructor() {
+          super();
+          this.state = { counter: 0 };
+          console.log("constructor!");
+        }
+
+        setCounter() {
+          console.log("actualizar el counter!");
+          const counter = this.state.counter + 1;
+          this.setState({ counter });
+        }
+
+        componentDidMount() {
+          console.log("componentDidMount!");
+        }
+
+        componentDidUpdate() {
+          console.log("componentDidUpdate");
+        }
+
+        render() {
+          console.log("counter:", this.state.counter);
+
+          return (
+            <div className="time-machine">
+              <div className="dt destination">
+                <ul>
+                  <li>
+                    <h3 className="dt-subtitle">Month</h3>
+                    <p className="dt-value">---</p>
+                  </li>
+                  <li>
+                    <h3 className="dt-subtitle">Day</h3>
+                    <p className="dt-value">--</p>
+                  </li>
+                  <li>
+                    <h3 className="dt-subtitle">Year</h3>
+                    <p className="dt-value">----</p>
+                  </li>
+                  <li>
+                    <h3 className="dt-subtitle">Hour</h3>
+                    <p className="dt-value">--</p>
+                  </li>
+                  <li>
+                    <h3 className="dt-subtitle">Min</h3>
+                    <p className="dt-value">--</p>
+                  </li>
+                </ul>
+                <div>
+                  <h1 className="dt-title">Destination Time</h1>
+                  <button>Confirm</button>
+                </div>
+              </div>
+              <div className="dt set-destination-time">
+                <ul>
+                  <li>
+                    <button onClick={this.setCounter.bind(this)}>+</button>
+                    <button>-</button>
+                  </li>
+                  <li>
+                    <button>+</button>
+                    <button>-</button>
+                  </li>
+                  <li>
+                    <button>+</button>
+                    <button>-</button>
+                  </li>
+                  <li>
+                    <button>+</button>
+                    <button>-</button>
+                  </li>
+                  <li>
+                    <button>+</button>
+                    <button>-</button>
+                  </li>
+                </ul>
+                <div>
+                  <h1 className="dt-title">Set Destination Time</h1>
+                </div>
+              </div>
+              <div className="dt present-time">
+                <ul>
+                  <li>
+                    <h3 className="dt-subtitle">Month</h3>
+                    <p className="dt-value">Dec</p>
+                  </li>
+                  <li>
+                    <h3 className="dt-subtitle">Day</h3>
+                    <p className="dt-value">1</p>
+                  </li>
+                  <li>
+                    <h3 className="dt-subtitle">Year</h3>
+                    <p className="dt-value">2020</p>
+                  </li>
+                  <li>
+                    <h3 className="dt-subtitle">Hour</h3>
+                    <p className="dt-value">12</p>
+                  </li>
+                  <li>
+                    <h3 className="dt-subtitle">Min</h3>
+                    <p className="dt-value">52</p>
+                  </li>
+                </ul>
+                <div>
+                  <h1 className="dt-title">Present Time</h1>
+                </div>
+              </div>
+              <div className="dt last-time">
+                <ul>
+                  <li>
+                    <h3 className="dt-subtitle">Month</h3>
+                    <p className="dt-value">--</p>
+                  </li>
+                  <li>
+                    <h3 className="dt-subtitle">Day</h3>
+                    <p className="dt-value">--</p>
+                  </li>
+                  <li>
+                    <h3 className="dt-subtitle">Year</h3>
+                    <p className="dt-value">----</p>
+                  </li>
+                  <li>
+                    <h3 className="dt-subtitle">Hour</h3>
+                    <p className="dt-value">--</p>
+                  </li>
+                  <li>
+                    <h3 className="dt-subtitle">Min</h3>
+                    <p className="dt-value">--</p>
+                  </li>
+                </ul>
+                <div>
+                  <h1 className="dt-title">Last Time Departed</h1>
+                </div>
+              </div>
+              <div className="dt times-departed-list">
+                <ul>
+                  <li>Sat Apr 03 2021 12:48:13 GMT+0200 (Central European Summer Time)</li>
+                </ul>
+                <div>
+                  <h1 className="dt-title">Times departed lists</h1>
+                </div>
+              </div>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<TimeMachine />, rootNode);
+    </script>
+  </body>
+</html>

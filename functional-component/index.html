@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React - Functional component</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="https://unpkg.com/@babel/standalone@7.12.4/babel.min.js"></script>
+    <script src="https://unpkg.com/prop-types@15.6/prop-types.js"></script>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script type="text/babel">
+      const rootNode = document.getElementById("app");
+
+      // 1. Su contenido debe ser dinámico.
+      // 2. Suponiendo que tenemos nuestros estilos basados en clases,
+      //    necesitamos tener la posiblidad de especificar que clases queremos tenga el botón.
+      // 3. Por último, necesitamos que el atributo type sea dinámico.
+
+      const Button = ({ children, type, className }) => (
+        <button type={type} className={className}>
+          {children}
+        </button>
+      );
+
+      Button.defaultProps = {
+        type: "button",
+        className: "btn",
+      };
+
+      Button.propTypes = {
+        type: PropTypes.oneOf(["button", "submit", "reset"]),
+        className: PropTypes.string,
+        children: PropTypes.node.isRequired,
+      };
+
+      const App = () => (
+        <div>
+          <Button type="abcde" className="btn btn-success">
+            Enviar <svg />
+          </Button>
+          <Button type="reset" className="btn btn-reset">
+            Cancel <svg />
+          </Button>
+        </div>
+      );
+
+      ReactDOM.render(<App />, rootNode);
+    </script>
+  </body>
+</html>
