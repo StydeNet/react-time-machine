@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time Machine with React</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png" />
+    <link rel="manifest" href="./assets/favicon/site.webmanifest" />
+    <link rel="mask-icon" href="./assets/favicon/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#ffc40d" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="stylesheet" href="./assets/time-machine.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="https://unpkg.com/@babel/standalone@7.12.4/babel.min.js"></script>
+    <script src="https://unpkg.com/prop-types@15.6/prop-types.js"></script>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script type="text/babel">
+      const rootNode = document.getElementById("app");
+
+      const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+
+      const Title = ({ value, children }) => (
+        <div>
+          <h1 className="dt-title">{value}</h1>
+          {children}
+        </div>
+      );
+
+      Title.propTypes = {
+        value: PropTypes.string.isRequired,
+        children: PropTypes.node,
+      };
+
+      const Item = ({ title, value }) => (
+        <li>
+          <h3 className="dt-subtitle">{title}</h3>
+          <p className="dt-value">{value}</p>
+        </li>
+      );
+
+      Item.propTypes = {
+        title: PropTypes.oneOf(["Month", "Day", "Year", "Hour", "Min"]).isRequired,
+        value: PropTypes.string,
+      };
+
+      const List = ({ month, day, year, hour, min }) => (
+        <ul>
+          <Item title="Month" value={month} />
+          <Item title="Day" value={day} />
+          <Item title="Year" value={year} />
+          <Item title="Hour" value={hour} />
+          <Item title="Min" value={min} />
+        </ul>
+      );
+
+      List.propTypes = {
+        month: PropTypes.string.isRequired,
+        day: PropTypes.string.isRequired,
+        year: PropTypes.string.isRequired,
+        hour: PropTypes.string.isRequired,
+        min: PropTypes.string.isRequired,
+      };
+
+      const DestinationTime = () => (
+        <div className="dt destination">
+          <List month="---" day="--" year="----" hour="--" min="--" />
+          <Title value="Destination Time">
+            <button>Confirm</button>
+          </Title>
+        </div>
+      );
+
+      const SetDestinationTime = () => (
+        <div className="dt set-destination-time">
+          <ul>
+            <li>
+              <button>+</button>
+              <button>-</button>
+            </li>
+            <li>
+              <button>+</button>
+              <button>-</button>
+            </li>
+            <li>
+              <button>+</button>
+              <button>-</button>
+            </li>
+            <li>
+              <button>+</button>
+              <button>-</button>
+            </li>
+            <li>
+              <button>+</button>
+              <button>-</button>
+            </li>
+          </ul>
+          <Title value="Set Destination Time" />
+        </div>
+      );
+
+      const PresentTime = ({ time }) => (
+        <div className="dt present-time">
+          <List
+            month={MONTHS[time.getMonth()]}
+            day={time.getDate().toString()}
+            year={time.getFullYear().toString()}
+            hour={time.getHours().toString()}
+            min={time.getMinutes().toString()}
+          />
+          <Title value="Present Time" />
+        </div>
+      );
+
+      PresentTime.propTypes = {
+        time: PropTypes.instanceOf(Date),
+      };
+
+      const LastTime = () => (
+        <div className="dt last-time">
+          <List month="---" day="--" year="----" hour="--" min="--" />
+          <Title value="Last Time Departed" />
+        </div>
+      );
+
+      const TimesDepartedList = ({ times }) => {
+        if (times.length < 1) return null;
+        return (
+          <div className="dt times-departed-list">
+            <ul>
+              {times.map((time) => (
+                <li key={time}>{time}</li>
+              ))}
+            </ul>
+            <Title value="Times departed lists" />
+          </div>
+        );
+      };
+
+      TimesDepartedList.defaultProps = {
+        times: [],
+      };
+
+      TimesDepartedList.propTypes = {
+        times: PropTypes.array,
+      };
+
+      class TimeMachine extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            presentTime: new Date(),
+            timesDeparted: [],
+          };
+        }
+
+        componentDidMount() {
+          console.log("Mounted TimeMachine component");
+          this.timer = setInterval(() => this.setState((prevState) => ({ presentTime: new Date() })), 1000);
+        }
+
+        componentWillUnMount() {
+          console.log("Unmounted TimeMachine component");
+          clearInterval(this.timer);
+        }
+
+        render() {
+          const { presentTime, timesDeparted } = this.state;
+
+          return (
+            <div className="time-machine">
+              <DestinationTime />
+              <SetDestinationTime />
+              <PresentTime time={presentTime} />
+              <LastTime />
+              <TimesDepartedList times={timesDeparted} />
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<TimeMachine />, rootNode);
+    </script>
+  </body>
+</html>

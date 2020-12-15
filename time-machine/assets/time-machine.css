@@ -1,0 +1,168 @@
+@import url("https://fonts.googleapis.com/css2?family=Teko:wght@600&display=swap");
+
+@font-face {
+  font-family: openDisplay;
+  src: url("./open-24-display-st.ttf");
+}
+
+:root {
+  --primary-font: openDisplay;
+  --secondary-font: "Teko";
+  --auxiliary-font: sans-serif;
+  --punch: #da2c34;
+  --silver: #bfbfbf;
+  --cod-gray: #090708;
+  --scorpion: #5a5a5a;
+  --cinnabar: #e04d2d;
+  --screamin-green: #8dfa5a;
+  --roti: #b6a53d;
+  --falu-red: #881a1c;
+  --gray: #848484;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  font-size: 10px;
+}
+
+body {
+  background-color: var(--punch);
+  cursor: url("http://www.rw-designer.com/cursor-view/12423.png"), auto;
+  line-height: 1;
+  font-family: var(--primary-font), var(--auxiliary-font);
+}
+
+.dt-title,
+.dt-subtitle {
+  color: var(--silver);
+  font-family: var(--secondary-font), var(--auxiliary-font);
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0 auto;
+  padding: 0.5rem 0.8rem 0.2rem;
+}
+
+.dt-title {
+  background-color: var(--cod-gray);
+  display: inline-block;
+  font-size: 3rem;
+  vertical-align: middle;
+}
+
+.dt-value {
+  background-color: var(--cod-gray);
+  border: 0.2rem solid var(--scorpion);
+  border-radius: 0.2rem;
+  color: var(--cinnabar);
+  line-height: 1;
+  font-size: 8rem;
+  height: 9rem;
+  letter-spacing: 0.2rem;
+  text-align: center;
+  margin-top: 0.6rem;
+  padding: 0 0.5rem;
+}
+
+.present-time .dt-value {
+  color: var(--screamin-green);
+}
+
+.last-time .dt-value {
+  color: var(--roti);
+}
+
+.dt-subtitle {
+  background-color: var(--falu-red);
+  display: inline-block;
+  font-size: 3rem;
+}
+
+.dt {
+  background: url("./pattern.png") repeat;
+  border: 0.5rem solid black;
+  height: calc(33vh - 3rem);
+  max-height: 210px;
+  margin: 0.5rem 0;
+}
+
+.dt ul {
+  display: flex;
+  justify-content: space-around;
+  margin: 0;
+  padding: 0;
+}
+
+.dt li {
+  display: inline-block;
+  margin: 1rem;
+}
+
+.dt li,
+.dt > div {
+  text-align: center;
+}
+
+.destination h1 {
+  cursor: url("http://www.rw-designer.com/cursor-view/12428.png"), pointer;
+}
+
+.destination button {
+  background-color: white;
+  border: 3px solid black;
+  cursor: url("http://www.rw-designer.com/cursor-view/12428.png"), pointer;
+  display: inline-block;
+  font-family: var(--secondary-font), var(--auxiliary-font);
+  font-size: 1.5rem;
+  margin: 0 1rem;
+  border-radius: 0.2rem;
+  line-height: 1;
+  height: 3.9rem;
+  padding: 0 1rem;
+  outline: 0;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.set-destination-time {
+  height: 164px;
+}
+
+.set-destination-time button {
+  background-color: white;
+  border: 3px solid black;
+  cursor: url("http://www.rw-designer.com/cursor-view/12428.png"), pointer;
+  display: block;
+  font-size: 3.5rem;
+  margin: 0.4rem 0;
+  border-radius: 0.2rem;
+  line-height: 1;
+  height: 4rem;
+  padding: 0;
+  outline: 0;
+  width: 4rem;
+}
+
+.set-destination-time button:active {
+  box-shadow: inset 0 0 10px var(--gray);
+}
+
+.times-departed-list {
+  color: var(--falu-red);
+  font-size: 2.2rem;
+  height: auto;
+  padding-bottom: 1rem;
+}
+
+.times-departed-list ul {
+  flex-direction: column;
+}
+
+.time-machine {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  max-width: 700px;
+}
