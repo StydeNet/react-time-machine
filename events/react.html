@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React | Handling Events</title>
+
+    <style>
+      .light-switch {
+        background-color: black;
+        border: 1px solid black;
+        border-radius: 4px;
+        height: 200px;
+        width: 400px;
+      }
+
+      .light-switch.turn-on {
+        background-color: white;
+      }
+
+      .light-switch button {
+        background-color: white;
+        border: 1px solid black;
+        border-radius: 2px;
+        cursor: pointer;
+        margin: 10px;
+        padding: 2px 5px;
+        outline: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="https://unpkg.com/@babel/standalone@7.12.4/babel.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script type="text/babel">
+      const rootNode = document.getElementById("app");
+
+      const ActionLink = () => {
+        const handleClick = (e) => {
+          e.preventDefault();
+          console.log("the link was clicked.");
+        };
+        return (
+          <a href="#" onClick={handleClick}>
+            Click me
+          </a>
+        );
+      };
+
+      const App = () => (
+        <div>
+          <ActionLink />
+          <div>
+            <button onClick={() => console.log("click meee!")}>click me</button>
+          </div>
+          <div>
+            <input name="firstname" onChange={(e) => console.log(e.target.value)} />
+          </div>
+        </div>
+      );
+
+      class LightSwitch extends React.Component {
+        constructor() {
+          super();
+          this.state = { isTurnOn: false };
+
+          this.setTurnOn = this.setTurnOn.bind(this);
+        }
+
+        setTurnOn() {
+          this.setState((state) => ({ isTurnOn: !state.isTurnOn }));
+        }
+
+        // setTurnOn = () => {
+        //   this.setState((state) => ({ isTurnOn: !state.isTurnOn }));
+        // }
+
+        render() {
+          const { isTurnOn } = this.state;
+          return (
+            <div className={`light-switch ${isTurnOn ? "turn-on" : "turn-off"}`}>
+              <button onClick={this.setTurnOn}>{isTurnOn ? "ON 🌞" : "OFF 🌚"}</button>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<LightSwitch />, rootNode);
+    </script>
+  </body>
+</html>

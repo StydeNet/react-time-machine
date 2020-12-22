@@ -24,9 +24,11 @@
 
       const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
-      const Title = ({ value, children }) => (
+      const Title = ({ value, children, onClick }) => (
         <div>
-          <h1 className="dt-title">{value}</h1>
+          <h1 onClick={onClick} className="dt-title">
+            {value}
+          </h1>
           {children}
         </div>
       );
@@ -34,6 +36,7 @@
       Title.propTypes = {
         value: PropTypes.string.isRequired,
         children: PropTypes.node,
+        onClick: PropTypes.func,
       };
 
       const Item = ({ title, value }) => (
@@ -66,42 +69,69 @@
         min: PropTypes.string.isRequired,
       };
 
-      const DestinationTime = () => (
-        <div className="dt destination">
-          <List month="---" day="--" year="----" hour="--" min="--" />
-          <Title value="Destination Time">
-            <button>Confirm</button>
-          </Title>
-        </div>
-      );
+      const getValues = (time) => {
+        const month = time ? MONTHS[new Date(time).getMonth().toString()] : "---";
+        const day = time ? new Date(time).getDate().toString() : "--";
+        const year = time ? new Date(time).getFullYear().toString() : "----";
+        const hour = time ? new Date(time).getHours().toString() : "--";
+        const min = time ? new Date(time).getMinutes().toString() : "--";
+        return { month, day, year, hour, min };
+      };
 
-      const SetDestinationTime = () => (
-        <div className="dt set-destination-time">
-          <ul>
-            <li>
-              <button>+</button>
-              <button>-</button>
-            </li>
-            <li>
-              <button>+</button>
-              <button>-</button>
-            </li>
-            <li>
-              <button>+</button>
-              <button>-</button>
-            </li>
-            <li>
-              <button>+</button>
-              <button>-</button>
-            </li>
-            <li>
-              <button>+</button>
-              <button>-</button>
-            </li>
-          </ul>
-          <Title value="Set Destination Time" />
-        </div>
-      );
+      const DestinationTime = ({ time, isOpen, setDtIsOpen, confirmDT }) => {
+        const { month, day, year, hour, min } = getValues(time);
+        return (
+          <div className="dt destination">
+            <List month={month} day={day} year={year} hour={hour} min={min} />
+            <Title onClick={setDtIsOpen} value="Destination Time">
+              {isOpen && <button onClick={confirmDT}>Confirm</button>}
+            </Title>
+          </div>
+        );
+      };
+
+      DestinationTime.propTypes = {
+        time: PropTypes.instanceOf(Date),
+        isOpen: PropTypes.bool,
+        setDtIsOpen: PropTypes.func.isRequired,
+        confirmDT: PropTypes.func.isRequired,
+      };
+
+      const SetDestinationTime = ({ isOpen, setDateTime }) => {
+        if (!isOpen) return null;
+        return (
+          <div className="dt set-destination-time">
+            <ul>
+              <li>
+                <button onClick={() => setDateTime("INCREMENT", "month")}>+</button>
+                <button onClick={() => setDateTime("DECREMENT", "month")}>-</button>
+              </li>
+              <li>
+                <button onClick={() => setDateTime("INCREMENT", "day")}>+</button>
+                <button onClick={() => setDateTime("DECREMENT", "day")}>-</button>
+              </li>
+              <li>
+                <button onClick={() => setDateTime("INCREMENT", "year")}>+</button>
+                <button onClick={() => setDateTime("DECREMENT", "year")}>-</button>
+              </li>
+              <li>
+                <button onClick={() => setDateTime("INCREMENT", "hour")}>+</button>
+                <button onClick={() => setDateTime("DECREMENT", "hour")}>-</button>
+              </li>
+              <li>
+                <button onClick={() => setDateTime("INCREMENT", "min")}>+</button>
+                <button onClick={() => setDateTime("DECREMENT", "min")}>-</button>
+              </li>
+            </ul>
+            <Title value="Set Destination Time" />
+          </div>
+        );
+      };
+
+      SetDestinationTime.propTypes = {
+        isOpen: PropTypes.bool,
+        setDateTime: PropTypes.func.isRequired,
+      };
 
       const PresentTime = ({ time }) => (
         <div className="dt present-time">
@@ -120,12 +150,19 @@
         time: PropTypes.instanceOf(Date),
       };
 
-      const LastTime = () => (
-        <div className="dt last-time">
-          <List month="---" day="--" year="----" hour="--" min="--" />
-          <Title value="Last Time Departed" />
-        </div>
-      );
+      const LastTime = ({ time }) => {
+        const { month, day, year, hour, min } = getValues(time);
+        return (
+          <div className="dt last-time">
+            <List month={month} day={day} year={year} hour={hour} min={min} />
+            <Title value="Last Time Departed" />
+          </div>
+        );
+      };
+
+      LastTime.propTypes = {
+        time: PropTypes.instanceOf(Date),
+      };
 
       const TimesDepartedList = ({ times }) => {
         if (times.length < 1) return null;
@@ -133,7 +170,7 @@
           <div className="dt times-departed-list">
             <ul>
               {times.map((time) => (
-                <li key={time}>{time}</li>
+                <li key={time}>{new Date(time).toString()}</li>
               ))}
             </ul>
             <Title value="Times departed lists" />
@@ -153,9 +190,15 @@
         constructor() {
           super();
           this.state = {
+            dtIsOpen: false,
+            destinationTime: null,
             presentTime: new Date(),
             timesDeparted: [],
           };
+
+          this.confirmDT = this.confirmDT.bind(this);
+          this.setDtIsOpen = this.setDtIsOpen.bind(this);
+          this.setDateTime = this.setDateTime.bind(this);
         }
 
         componentDidMount() {
@@ -168,15 +211,73 @@
           clearInterval(this.timer);
         }
 
+        setDtIsOpen() {
+          this.setState(({ dtIsOpen }) => {
+            const destinationTime = dtIsOpen ? null : new Date();
+            return { dtIsOpen: !dtIsOpen, destinationTime };
+          });
+        }
+
+        getNewTime(destinationTime, type, section) {
+          const currentDT = new Date(destinationTime.getTime());
+          switch (section) {
+            case "month":
+              const newMonth = type === "INCREMENT" ? currentDT.getMonth() + 1 : currentDT.getMonth() - 1;
+              return new Date(currentDT.setMonth(newMonth));
+              break;
+            case "day":
+              const newDay = type === "INCREMENT" ? currentDT.getDate() + 1 : currentDT.getDate() - 1;
+              return new Date(currentDT.setDate(newDay));
+              break;
+            case "year":
+              const newYear = type === "INCREMENT" ? currentDT.getFullYear() + 1 : currentDT.getFullYear() - 1;
+              return new Date(currentDT.setFullYear(newYear));
+              break;
+            case "hour":
+              const newHour = type === "INCREMENT" ? currentDT.getHours() + 1 : currentDT.getHours() - 1;
+              return new Date(currentDT.setHours(newHour));
+              break;
+            case "min":
+              const newMin = type === "INCREMENT" ? currentDT.getMinutes() + 1 : currentDT.getMinutes() - 1;
+              return new Date(currentDT.setMinutes(newMin));
+              break;
+          }
+        }
+
+        setDateTime(type, section) {
+          this.setState(({ destinationTime }) => {
+            const newTime = this.getNewTime(destinationTime, type, section);
+            return { destinationTime: newTime };
+          });
+        }
+
+        confirmDT() {
+          this.setState(
+            ({ dtIsOpen, destinationTime, timesDeparted }) => {
+              const newTimesDeparted = [destinationTime, ...timesDeparted];
+              return {
+                timesDeparted: newTimesDeparted,
+                lastTimeDeparted: destinationTime,
+              };
+            },
+            () => this.setDtIsOpen()
+          );
+        }
+
         render() {
-          const { presentTime, timesDeparted } = this.state;
+          const { dtIsOpen, presentTime, destinationTime, timesDeparted, lastTimeDeparted } = this.state;
 
           return (
             <div className="time-machine">
-              <DestinationTime />
-              <SetDestinationTime />
+              <DestinationTime
+                isOpen={dtIsOpen}
+                setDtIsOpen={this.setDtIsOpen}
+                time={destinationTime}
+                confirmDT={this.confirmDT}
+              />
+              <SetDestinationTime setDateTime={this.setDateTime} isOpen={dtIsOpen} />
               <PresentTime time={presentTime} />
-              <LastTime />
+              <LastTime time={lastTimeDeparted} />
               <TimesDepartedList times={timesDeparted} />
             </div>
           );

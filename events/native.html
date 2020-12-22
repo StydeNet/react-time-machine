@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Events</title>
+  </head>
+  <body>
+    <button id="first-option">Click me</button>
+
+    <button onclick="Hello()">Click me</button>
+
+    <a href="#" onclick="console.log('the link was clicked'); return false">Click me (native)</a>
+
+    <script>
+      const btnNode = document.getElementById("first-option");
+      btnNode.addEventListener("click", () => console.log("primera opción usando addEventListener"));
+      btnNode.addEventListener("click", () =>
+        console.log("agregando un segundo console.log a la primera opción usando addEventListener")
+      );
+
+      function Hello() {
+        console.log("segunda opción usando el atributo onclick");
+      }
+    </script>
+  </body>
+</html>
