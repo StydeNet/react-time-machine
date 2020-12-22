@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React | importancia del atributo Key</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="https://unpkg.com/@babel/standalone@7.12.4/babel.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script type="text/babel">
+      const rootNode = document.getElementById("app");
+
+      class ItemsList extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            countries: [
+              { name: "Venezuela", id: "1" },
+              { name: "España", id: "2" },
+              { name: "Mexico", id: "3" },
+            ],
+          };
+          this.addCountry = this.addCountry.bind(this);
+        }
+
+        addCountry() {
+          this.setState((state) => ({ countries: [{ name: "Brasil", id: 4 }, ...state.countries] }));
+        }
+
+        render() {
+          const { countries } = this.state;
+          return (
+            <div>
+              <button onClick={this.addCountry}>Agregar a Brasil a la lista</button>
+              <h2>Usando map index</h2>
+              {countries.map(({ name }, index) => (
+                <div key={index}>
+                  <label htmlFor={name}>{name}</label>
+                  <input type="text" id={name} placeholder="Cuál es su capital?" />
+                </div>
+              ))}
+              <h2>Usando Id único</h2>
+              {countries.map(({ id, name }) => (
+                <div key={id}>
+                  <label htmlFor={name}>{name}</label>
+                  <input type="text" id={name} placeholder="Cuál es su capital?" />
+                </div>
+              ))}
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<ItemsList />, rootNode);
+    </script>
+  </body>
+</html>
