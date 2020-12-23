@@ -1,5 +1,7 @@
 # Curso básico de React para Styde
 
+![demo](https://media.giphy.com/media/s68QaMyKwJtHIWZnDy/giphy.gif)
+
 ## Lista de episodios:
 
 - 1er episodio: Comparativa entre JavaScript vanilla y React. Diferencias y que problema soluciona React.
