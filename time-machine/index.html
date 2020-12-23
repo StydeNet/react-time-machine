@@ -203,12 +203,12 @@
 
         componentDidMount() {
           console.log("Mounted TimeMachine component");
-          this.timer = setInterval(() => this.setState((prevState) => ({ presentTime: new Date() })), 1000);
+          // this.timer = setInterval(() => this.setState((prevState) => ({ presentTime: new Date() })), 1000);
         }
 
         componentWillUnMount() {
           console.log("Unmounted TimeMachine component");
-          clearInterval(this.timer);
+          // clearInterval(this.timer);
         }
 
         setDtIsOpen() {
